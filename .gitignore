@@ -6,7 +6,8 @@ node_modules
 .vscode
 .DS_STORE
 coverage
-dist
+# # Removing for now to simplify package access
+# dist
 package-lock.json
 _book
 temp
