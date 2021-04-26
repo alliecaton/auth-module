@@ -61,15 +61,25 @@ export class RequestHandler {
           throw new ExpiredAuthSessionError()
         }
 
+        /**
+         * We don't want to automatically try to refresh here until we can solve the race condition with requests
+         */
+        return config
+
+        // if (config.url !== '/user/auth') return config
+
+        // // this could work instead, to solve the race condition
+        // // isValid = await this.scheme.refreshController.handleRefresh.handleRefresh().then(() => true).catch(() => {
+
         // Refresh token is available. Attempt refresh.
-        isValid = await (this.scheme as RefreshableScheme)
-          .refreshTokens()
-          .then(() => true)
-          .catch(() => {
-            // Tokens couldn't be refreshed. Force reset.
-            this.scheme.reset()
-            throw new ExpiredAuthSessionError()
-          })
+        // isValid = await (this.scheme as RefreshableScheme)
+        //   .refreshTokens()
+        //   .then(() => true)
+        //   .catch(() => {
+        //     // Tokens couldn't be refreshed. Force reset.
+        //     this.scheme.reset()
+        //     throw new ExpiredAuthSessionError()
+        //   })
       }
 
       // Sync token
