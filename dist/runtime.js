@@ -783,7 +783,12 @@ class RequestHandler {
           this.scheme.reset();
           throw new ExpiredAuthSessionError();
         }
-        return config;
+        if (config.url !== "/user/auth")
+          return config;
+        isValid = await this.scheme.refreshController.handleRefresh().then(() => true).catch(() => {
+          this.scheme.reset();
+          throw new ExpiredAuthSessionError();
+        });
       }
       const token = this.scheme.token.get();
       if (!isValid) {

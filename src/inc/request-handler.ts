@@ -64,22 +64,19 @@ export class RequestHandler {
         /**
          * We don't want to automatically try to refresh here until we can solve the race condition with requests
          */
-        return config
-
-        // if (config.url !== '/user/auth') return config
-
-        // // this could work instead, to solve the race condition
-        // // isValid = await this.scheme.refreshController.handleRefresh.handleRefresh().then(() => true).catch(() => {
+        if (config.url !== '/user/auth') return config
 
         // Refresh token is available. Attempt refresh.
-        // isValid = await (this.scheme as RefreshableScheme)
-        //   .refreshTokens()
-        //   .then(() => true)
-        //   .catch(() => {
-        //     // Tokens couldn't be refreshed. Force reset.
-        //     this.scheme.reset()
-        //     throw new ExpiredAuthSessionError()
-        //   })
+        // We use the refresh controller to avoid a race condition here
+        isValid = await (this.scheme as RefreshableScheme)
+          .refreshController
+          .handleRefresh()
+          .then(() => true)
+          .catch(() => {
+            // Tokens couldn't be refreshed. Force reset.
+            this.scheme.reset()
+            throw new ExpiredAuthSessionError()
+          })
       }
 
       // Sync token
