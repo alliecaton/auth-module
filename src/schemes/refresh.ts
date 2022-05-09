@@ -1,3 +1,4 @@
+import jwtDecode from 'jwt-decode'
 import type {
   RefreshableScheme,
   SchemePartialOptions,
@@ -21,7 +22,7 @@ export interface RefreshSchemeEndpoints extends LocalSchemeEndpoints {
 
 export interface RefreshSchemeOptions
   extends LocalSchemeOptions,
-    RefreshableSchemeOptions {
+  RefreshableSchemeOptions {
   endpoints: RefreshSchemeEndpoints
   autoLogout: boolean
 }
@@ -47,7 +48,7 @@ const DEFAULTS: SchemePartialOptions<RefreshSchemeOptions> = {
 }
 
 export class RefreshScheme<
-    OptionsT extends RefreshSchemeOptions = RefreshSchemeOptions
+  OptionsT extends RefreshSchemeOptions = RefreshSchemeOptions
   >
   extends LocalScheme<OptionsT>
   implements RefreshableScheme<OptionsT> {
@@ -84,15 +85,28 @@ export class RefreshScheme<
       return response
     }
 
-    // Check status wasn't enabled, let it pass
-    if (!checkStatus) {
-      response.valid = true
-      return response
+    console.log('HIT CHECK')
+
+    if (typeof token === 'string') {
+      const formattedToken = token.replace('Bearer ', '')
+
+      const decodedToken = jwtDecode(formattedToken)
+
+      if (!decodedToken.accessible_domains.includes('the-atlas')) {
+          response.valid = false
+          return response
+      }
     }
 
     // Get status
     const tokenStatus = this.token.status()
     const refreshTokenStatus = this.refreshToken.status()
+
+    // Check status wasn't enabled, let it pass
+    if (!checkStatus) {
+      response.valid = true
+      return response
+    }
 
     // Refresh token has expired. There is no way to refresh. Force reset.
     if (refreshTokenStatus.expired()) {

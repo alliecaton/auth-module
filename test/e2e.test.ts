@@ -135,6 +135,47 @@ describe('e2e', () => {
     await page.close()
   })
 
+  // test('loginWithAccessibleDomains', async () => {
+  //   const page = await createPage('/')
+  //   await page.waitForFunction('!!window.$nuxt')
+
+  //   const {
+  //     loginToken,
+  //     loginRefreshToken,
+  //     loginExpiresAt,
+  //     loginUser,
+  //     loginAxiosBearer,
+  //     loginResponse
+  //   } = await page.evaluate(async () => {
+  //     const loginResponse = await window.$nuxt.$auth.loginWith('localRefresh', {
+  //       data: { username: 'test_username', password: '123' }
+  //     })
+  //     const strategy = (window.$nuxt.$auth
+  //       .strategy as unknown) as RefreshableScheme
+        
+  //     return {
+  //       loginAxiosBearer:
+  //         window.$nuxt.$axios.defaults.headers.common.Authorization,
+  //       loginToken: strategy.token.get(),
+  //       loginRefreshToken: strategy.refreshToken.get(),
+  //       // @ts-ignore
+  //       loginExpiresAt: strategy.token._getExpiration(),
+  //       loginUser: window.$nuxt.$auth.user,
+  //       loginResponse,
+  //     }
+  //   })
+
+  //   expect(loginAxiosBearer).toBeDefined()
+  //   expect(loginAxiosBearer.split(' ')).toHaveLength(2)
+  //   expect(loginAxiosBearer.split(' ')[0]).toMatch(/^Bearer$/i)
+  //   expect(loginToken).toBeDefined()
+  //   expect(loginRefreshToken).toBeDefined()
+  //   expect(loginExpiresAt).toBeDefined()
+  //   expect(loginUser).toBeDefined()
+  //   expect(loginUser.username).toBe('test_username')
+  //   expect(loginResponse).toBeDefined()
+  // })
+
   test('logout', async () => {
     const page = await createPage('/')
     await page.waitForFunction('!!window.$nuxt')

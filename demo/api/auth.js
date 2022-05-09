@@ -33,7 +33,6 @@ app.post('/login', (req, res) => {
   const expiresIn = 15
   const refreshToken =
     Math.floor(Math.random() * (1000000000000000 - 1 + 1)) + 1
-
   if (!valid) {
     throw new Error('Invalid username or password')
   }
@@ -43,6 +42,8 @@ app.post('/login', (req, res) => {
       username,
       picture: 'https://github.com/nuxt.png',
       name: 'User ' + username,
+      // spoofed accessible_domains
+      accessible_domains: ['market-edge'],
       scope: ['test', 'user']
     },
     'dummy',
