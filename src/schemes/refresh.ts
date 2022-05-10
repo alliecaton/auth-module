@@ -95,8 +95,6 @@ export class RefreshScheme<
 
       const decodedToken: DecodedToken = jwtDecode(formattedToken)
 
-      console.log(decodedToken)
-
       if (
         decodedToken &&
         decodedToken.accessible_domains &&
@@ -106,8 +104,6 @@ export class RefreshScheme<
         return response
       }
     }
-
-    console.log('after domain check')
 
     // Get status
     const tokenStatus = this.token.status()
