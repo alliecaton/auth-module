@@ -27,6 +27,10 @@ export interface RefreshSchemeOptions
   autoLogout: boolean
 }
 
+interface DecodedToken extends RefreshToken {
+  accessible_domains: string[]
+}
+
 const DEFAULTS: SchemePartialOptions<RefreshSchemeOptions> = {
   name: 'refresh',
   endpoints: {
@@ -51,7 +55,8 @@ export class RefreshScheme<
     OptionsT extends RefreshSchemeOptions = RefreshSchemeOptions
   >
   extends LocalScheme<OptionsT>
-  implements RefreshableScheme<OptionsT> {
+  implements RefreshableScheme<OptionsT>
+{
   public refreshToken: RefreshToken
   public refreshController: RefreshController
 
@@ -85,12 +90,16 @@ export class RefreshScheme<
       return response
     }
 
-    if (typeof token === 'string') {
+    if (token) {
       const formattedToken = token.replace('Bearer ', '')
 
-      const decodedToken = jwtDecode(formattedToken)
+      const decodedToken: DecodedToken = jwtDecode(formattedToken)
 
-      if (!decodedToken.accessible_domains.includes('the-atlas')) {
+      if (
+        decodedToken &&
+        decodedToken.accessible_domains &&
+        !decodedToken.accessible_domains.includes('the-atlas')
+      ) {
         response.valid = false
         return response
       }

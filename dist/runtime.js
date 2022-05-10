@@ -1428,12 +1428,16 @@ class RefreshScheme extends LocalScheme {
     if (!token || !refreshToken) {
       return response;
     }
-    if (typeof token === "string") {
-      const formattedToken = token.replace("Bearer ", "");
-      const decodedToken = jwtDecode__default["default"](formattedToken);
-      if (!decodedToken.accessible_domains.includes("the-atlas")) {
-        response.valid = false;
-        return response;
+    if (token) {
+      const formattedToken = token.replace('Bearer ', '')
+      const decodedToken = jwtDecode(formattedToken)
+      if (
+        decodedToken &&
+        decodedToken.accessible_domains &&
+        !decodedToken.accessible_domains.includes('the-atlas')
+      ) {
+        response.valid = false
+        return response
       }
     }
     const tokenStatus = this.token.status();
