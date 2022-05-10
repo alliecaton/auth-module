@@ -1431,6 +1431,7 @@ class RefreshScheme extends LocalScheme {
     if (token) {
       const formattedToken = token.replace('Bearer ', '')
       const decodedToken = jwtDecode(formattedToken)
+      console.log(decodedToken)
       if (
         decodedToken &&
         decodedToken.accessible_domains &&
@@ -1440,6 +1441,7 @@ class RefreshScheme extends LocalScheme {
         return response
       }
     }
+    console.log("hit after domain check")
     const tokenStatus = this.token.status();
     const refreshTokenStatus = this.refreshToken.status();
     if (!checkStatus) {
