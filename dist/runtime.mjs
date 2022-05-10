@@ -889,7 +889,7 @@ class BaseScheme {
   }
 }
 
-const DEFAULTS = {
+const DEFAULTS$3 = {
   name: "local",
   endpoints: {
     login: {
@@ -925,7 +925,7 @@ const DEFAULTS = {
 };
 class LocalScheme extends BaseScheme {
   constructor($auth, options, ...defaults) {
-    super($auth, options, ...defaults, DEFAULTS);
+    super($auth, options, ...defaults, DEFAULTS$3);
     this.token = new Token(this, this.$auth.$storage);
     this.requestHandler = new RequestHandler(this, this.$auth.ctx.$axios);
   }
@@ -1037,7 +1037,7 @@ class LocalScheme extends BaseScheme {
   }
 }
 
-const DEFAULTS$1 = {
+const DEFAULTS$2 = {
   name: "cookie",
   cookie: {
     name: null
@@ -1055,7 +1055,7 @@ const DEFAULTS$1 = {
 };
 class CookieScheme extends LocalScheme {
   constructor($auth, options) {
-    super($auth, options, DEFAULTS$1);
+    super($auth, options, DEFAULTS$2);
   }
   mounted() {
     if (process.server) {
@@ -1095,7 +1095,7 @@ class CookieScheme extends LocalScheme {
   }
 }
 
-const DEFAULTS$2 = {
+const DEFAULTS$1 = {
   name: "oauth2",
   accessType: null,
   redirectUri: null,
@@ -1136,7 +1136,7 @@ const DEFAULTS$2 = {
 };
 class Oauth2Scheme extends BaseScheme {
   constructor($auth, options, ...defaults) {
-    super($auth, options, ...defaults, DEFAULTS$2);
+    super($auth, options, ...defaults, DEFAULTS$1);
     this.req = $auth.ctx.req;
     this.token = new Token(this, this.$auth.$storage);
     this.refreshToken = new RefreshToken(this, this.$auth.$storage);
@@ -1379,7 +1379,7 @@ class Oauth2Scheme extends BaseScheme {
   }
 }
 
-const DEFAULTS$3 = {
+const DEFAULTS = {
   name: "refresh",
   endpoints: {
     refresh: {
@@ -1400,7 +1400,7 @@ const DEFAULTS$3 = {
 };
 class RefreshScheme extends LocalScheme {
   constructor($auth, options) {
-    super($auth, options, DEFAULTS$3);
+    super($auth, options, DEFAULTS);
     this.refreshToken = new RefreshToken(this, this.$auth.$storage);
     this.refreshController = new RefreshController(this);
   }
@@ -1416,12 +1416,20 @@ class RefreshScheme extends LocalScheme {
     if (!token || !refreshToken) {
       return response;
     }
+    if (typeof token === "string") {
+      const formattedToken = token.replace("Bearer ", "");
+      const decodedToken = jwtDecode(formattedToken);
+      if (!decodedToken.accessible_domains.includes("the-atlas")) {
+        response.valid = false;
+        return response;
+      }
+    }
+    const tokenStatus = this.token.status();
+    const refreshTokenStatus = this.refreshToken.status();
     if (!checkStatus) {
       response.valid = true;
       return response;
     }
-    const tokenStatus = this.token.status();
-    const refreshTokenStatus = this.refreshToken.status();
     if (refreshTokenStatus.expired()) {
       response.refreshTokenExpired = true;
       return response;

@@ -29,6 +29,10 @@ const refreshTokens = {}
 // [POST] /login
 app.post('/login', (req, res) => {
   const { username, password } = req.body
+  const accessibleDomains = req.body.accessibleDomains || [
+    'market-edge',
+    'the-atlas'
+  ]
   const valid = username.length && password === '123'
   const expiresIn = 15
   const refreshToken =
@@ -43,7 +47,7 @@ app.post('/login', (req, res) => {
       picture: 'https://github.com/nuxt.png',
       name: 'User ' + username,
       // spoofed accessible_domains
-      accessible_domains: ['market-edge'],
+      accessible_domains: accessibleDomains,
       scope: ['test', 'user']
     },
     'dummy',

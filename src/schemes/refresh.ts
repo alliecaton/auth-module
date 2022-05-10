@@ -22,7 +22,7 @@ export interface RefreshSchemeEndpoints extends LocalSchemeEndpoints {
 
 export interface RefreshSchemeOptions
   extends LocalSchemeOptions,
-  RefreshableSchemeOptions {
+    RefreshableSchemeOptions {
   endpoints: RefreshSchemeEndpoints
   autoLogout: boolean
 }
@@ -48,7 +48,7 @@ const DEFAULTS: SchemePartialOptions<RefreshSchemeOptions> = {
 }
 
 export class RefreshScheme<
-  OptionsT extends RefreshSchemeOptions = RefreshSchemeOptions
+    OptionsT extends RefreshSchemeOptions = RefreshSchemeOptions
   >
   extends LocalScheme<OptionsT>
   implements RefreshableScheme<OptionsT> {
@@ -85,16 +85,14 @@ export class RefreshScheme<
       return response
     }
 
-    console.log('HIT CHECK')
-
     if (typeof token === 'string') {
       const formattedToken = token.replace('Bearer ', '')
 
       const decodedToken = jwtDecode(formattedToken)
 
       if (!decodedToken.accessible_domains.includes('the-atlas')) {
-          response.valid = false
-          return response
+        response.valid = false
+        return response
       }
     }
 

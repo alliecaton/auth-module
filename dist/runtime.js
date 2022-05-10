@@ -171,7 +171,7 @@ class Storage {
     this.removeCookie(key);
   }
   _initState() {
-    Vue__default['default'].set(this, "_state", {});
+    Vue__default["default"].set(this, "_state", {});
     this._useVuex = this.options.vuex && !!this.ctx.store;
     if (this._useVuex) {
       const storeModule = {
@@ -179,7 +179,7 @@ class Storage {
         state: () => this.options.initialState,
         mutations: {
           SET(state, payload) {
-            Vue__default['default'].set(state, payload.key, payload.value);
+            Vue__default["default"].set(state, payload.key, payload.value);
           }
         }
       };
@@ -188,19 +188,19 @@ class Storage {
       });
       this.state = this.ctx.store.state[this.options.vuex.namespace];
     } else {
-      Vue__default['default'].set(this, "state", {});
+      Vue__default["default"].set(this, "state", {});
     }
   }
   setState(key, value) {
     if (key[0] === "_") {
-      Vue__default['default'].set(this._state, key, value);
+      Vue__default["default"].set(this._state, key, value);
     } else if (this._useVuex) {
       this.ctx.store.commit(this.options.vuex.namespace + "/SET", {
         key,
         value
       });
     } else {
-      Vue__default['default'].set(this.state, key, value);
+      Vue__default["default"].set(this.state, key, value);
     }
     return value;
   }
@@ -253,7 +253,7 @@ class Storage {
   }
   getCookies() {
     const cookieStr = process.client ? document.cookie : this.ctx.req.headers.cookie;
-    return cookie2__default['default'].parse(cookieStr || "") || {};
+    return cookie2__default["default"].parse(cookieStr || "") || {};
   }
   setCookie(key, value, options = {}) {
     if (!this.options.cookie || process.server && !this.ctx.res) {
@@ -269,7 +269,7 @@ class Storage {
     if (typeof _options.expires === "number") {
       _options.expires = new Date(Date.now() + _options.expires * 864e5);
     }
-    const serializedCookie = cookie2__default['default'].serialize(_key, _value, _options);
+    const serializedCookie = cookie2__default["default"].serialize(_key, _value, _options);
     if (process.client) {
       document.cookie = serializedCookie;
     } else if (process.server && this.ctx.res) {
@@ -646,6 +646,7 @@ class RefreshController {
   }
 }
 
+exports.TokenStatusEnum = void 0;
 (function(TokenStatusEnum2) {
   TokenStatusEnum2["UNKNOWN"] = "UNKNOWN";
   TokenStatusEnum2["VALID"] = "VALID";
@@ -727,7 +728,7 @@ class RefreshToken {
     const _tokenTTLMillis = Number(this.scheme.options.refreshToken.maxAge) * 1e3;
     const _tokenExpiresAtMillis = _tokenTTLMillis ? _tokenIssuedAtMillis + _tokenTTLMillis : 0;
     try {
-      refreshTokenExpiration = jwtDecode__default['default'](refreshToken + "").exp * 1e3 || _tokenExpiresAtMillis;
+      refreshTokenExpiration = jwtDecode__default["default"](refreshToken + "").exp * 1e3 || _tokenExpiresAtMillis;
     } catch (error) {
       refreshTokenExpiration = _tokenExpiresAtMillis;
       if (!(error && error.name === "InvalidTokenError")) {
@@ -871,7 +872,7 @@ class Token {
     const _tokenTTLMillis = Number(this.scheme.options.token.maxAge) * 1e3;
     const _tokenExpiresAtMillis = _tokenTTLMillis ? _tokenIssuedAtMillis + _tokenTTLMillis : 0;
     try {
-      tokenExpiration = jwtDecode__default['default'](token + "").exp * 1e3 || _tokenExpiresAtMillis;
+      tokenExpiration = jwtDecode__default["default"](token + "").exp * 1e3 || _tokenExpiresAtMillis;
     } catch (error) {
       tokenExpiration = _tokenExpiresAtMillis;
       if (!(error && error.name === "InvalidTokenError")) {
@@ -893,14 +894,14 @@ class Token {
 class BaseScheme {
   constructor($auth, ...options) {
     this.$auth = $auth;
-    this.options = options.reduce((p, c) => defu2__default['default'](p, c), {});
+    this.options = options.reduce((p, c) => defu2__default["default"](p, c), {});
   }
   get name() {
     return this.options.name;
   }
 }
 
-const DEFAULTS = {
+const DEFAULTS$3 = {
   name: "local",
   endpoints: {
     login: {
@@ -936,7 +937,7 @@ const DEFAULTS = {
 };
 class LocalScheme extends BaseScheme {
   constructor($auth, options, ...defaults) {
-    super($auth, options, ...defaults, DEFAULTS);
+    super($auth, options, ...defaults, DEFAULTS$3);
     this.token = new Token(this, this.$auth.$storage);
     this.requestHandler = new RequestHandler(this, this.$auth.ctx.$axios);
   }
@@ -1048,7 +1049,7 @@ class LocalScheme extends BaseScheme {
   }
 }
 
-const DEFAULTS$1 = {
+const DEFAULTS$2 = {
   name: "cookie",
   cookie: {
     name: null
@@ -1066,7 +1067,7 @@ const DEFAULTS$1 = {
 };
 class CookieScheme extends LocalScheme {
   constructor($auth, options) {
-    super($auth, options, DEFAULTS$1);
+    super($auth, options, DEFAULTS$2);
   }
   mounted() {
     if (process.server) {
@@ -1106,7 +1107,7 @@ class CookieScheme extends LocalScheme {
   }
 }
 
-const DEFAULTS$2 = {
+const DEFAULTS$1 = {
   name: "oauth2",
   accessType: null,
   redirectUri: null,
@@ -1147,7 +1148,7 @@ const DEFAULTS$2 = {
 };
 class Oauth2Scheme extends BaseScheme {
   constructor($auth, options, ...defaults) {
-    super($auth, options, ...defaults, DEFAULTS$2);
+    super($auth, options, ...defaults, DEFAULTS$1);
     this.req = $auth.ctx.req;
     this.token = new Token(this, this.$auth.$storage);
     this.refreshToken = new RefreshToken(this, this.$auth.$storage);
@@ -1160,10 +1161,10 @@ class Oauth2Scheme extends BaseScheme {
   get redirectURI() {
     const basePath = this.$auth.ctx.base || "";
     const path = normalizePath(basePath + "/" + this.$auth.options.redirect.callback);
-    return this.options.redirectUri || urlJoin(requrl2__default['default'](this.req), path);
+    return this.options.redirectUri || urlJoin(requrl2__default["default"](this.req), path);
   }
   get logoutRedirectURI() {
-    return this.options.logoutRedirectUri || urlJoin(requrl2__default['default'](this.req), this.$auth.options.redirect.logout);
+    return this.options.logoutRedirectUri || urlJoin(requrl2__default["default"](this.req), this.$auth.options.redirect.logout);
   }
   check(checkStatus = false) {
     const response = {
@@ -1390,7 +1391,7 @@ class Oauth2Scheme extends BaseScheme {
   }
 }
 
-const DEFAULTS$3 = {
+const DEFAULTS = {
   name: "refresh",
   endpoints: {
     refresh: {
@@ -1411,7 +1412,7 @@ const DEFAULTS$3 = {
 };
 class RefreshScheme extends LocalScheme {
   constructor($auth, options) {
-    super($auth, options, DEFAULTS$3);
+    super($auth, options, DEFAULTS);
     this.refreshToken = new RefreshToken(this, this.$auth.$storage);
     this.refreshController = new RefreshController(this);
   }
@@ -1427,12 +1428,20 @@ class RefreshScheme extends LocalScheme {
     if (!token || !refreshToken) {
       return response;
     }
+    if (typeof token === "string") {
+      const formattedToken = token.replace("Bearer ", "");
+      const decodedToken = jwtDecode__default["default"](formattedToken);
+      if (!decodedToken.accessible_domains.includes("the-atlas")) {
+        response.valid = false;
+        return response;
+      }
+    }
+    const tokenStatus = this.token.status();
+    const refreshTokenStatus = this.refreshToken.status();
     if (!checkStatus) {
       response.valid = true;
       return response;
     }
-    const tokenStatus = this.token.status();
-    const refreshTokenStatus = this.refreshToken.status();
     if (refreshTokenStatus.expired()) {
       response.refreshTokenExpired = true;
       return response;
