@@ -135,6 +135,55 @@ describe('e2e', () => {
     await page.close()
   })
 
+  test('invalidAccessibleDomains', async () => {
+    const page = await createPage('/')
+    await page.waitForFunction('!!window.$nuxt')
+
+    const {
+      loginToken,
+      loginRefreshToken,
+      loginExpiresAt,
+      loginUser,
+      loginAxiosBearer,
+      loginResponse,
+      isValid,
+    } = await page.evaluate(async () => {
+      const loginResponse = await window.$nuxt.$auth.loginWith('localRefresh', {
+        data: {
+          username: 'test_username',
+          password: '123',
+          accessibleDomains: ['market-edge']
+        }
+      })
+      const strategy = (window.$nuxt.$auth
+        .strategy as unknown) as RefreshableScheme
+
+      const validate = await window.$nuxt.$auth.check().valid
+
+      return {
+        loginAxiosBearer:
+          window.$nuxt.$axios.defaults.headers.common.Authorization,
+        loginToken: strategy.token.get(),
+        loginRefreshToken: strategy.refreshToken.get(),
+        // @ts-ignore
+        loginExpiresAt: strategy.token._getExpiration(),
+        loginUser: window.$nuxt.$auth.user,
+        loginResponse,
+        isValid: validate
+      }
+    })
+
+    expect(isValid).toBeFalsy() // checks that login attempt is invalid
+    expect(loginAxiosBearer).toBeDefined()
+    expect(loginAxiosBearer.split(' ')).toHaveLength(2)
+    expect(loginAxiosBearer.split(' ')[0]).toMatch(/^Bearer$/i)
+    expect(loginToken).toBeDefined()
+    expect(loginRefreshToken).toBeDefined()
+    expect(loginExpiresAt).toBeDefined()
+    expect(loginUser).toBeFalsy() // checks that there is no current user logged in
+    expect(loginResponse).toBeDefined()
+  })
+
   test('logout', async () => {
     const page = await createPage('/')
     await page.waitForFunction('!!window.$nuxt')
