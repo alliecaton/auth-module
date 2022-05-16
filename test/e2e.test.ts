@@ -135,7 +135,7 @@ describe('e2e', () => {
     await page.close()
   })
 
-  test('invalidAccessibleDomains', async () => {
+  test('whenAllowedDomainIsSet', async () => {
     const page = await createPage('/')
     await page.waitForFunction('!!window.$nuxt')
 
@@ -152,7 +152,7 @@ describe('e2e', () => {
         data: {
           username: 'test_username',
           password: '123',
-          accessibleDomains: ['market-edge']
+          accessibleDomains: ['marketedge.the-atlas.com']
         }
       })
       const strategy = (window.$nuxt.$auth

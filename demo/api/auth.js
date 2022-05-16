@@ -30,8 +30,8 @@ const refreshTokens = {}
 app.post('/login', (req, res) => {
   const { username, password } = req.body
   const accessibleDomains = req.body.accessibleDomains || [
-    'market-edge',
-    'the-atlas'
+    'marketedge.the-atlas.com',
+    'the-atlas.com'
   ]
   const valid = username.length && password === '123'
   const expiresIn = 15

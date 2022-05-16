@@ -25,6 +25,7 @@ export interface RefreshSchemeOptions
     RefreshableSchemeOptions {
   endpoints: RefreshSchemeEndpoints
   autoLogout: boolean
+  allowedDomain: string
 }
 
 const DEFAULTS: SchemePartialOptions<RefreshSchemeOptions> = {
@@ -44,6 +45,7 @@ const DEFAULTS: SchemePartialOptions<RefreshSchemeOptions> = {
     prefix: '_refresh_token.',
     expirationPrefix: '_refresh_token_expiration.'
   },
+  allowedDomain: 'the-atlas.com',
   autoLogout: false
 }
 
@@ -90,15 +92,13 @@ export class RefreshScheme<
     }
 
     if (token) {
-      // @ts-ignore 
-      const formattedToken = token.replace('Bearer ', '')
-
+      const formattedToken = (token as string).replace('Bearer ', '')
       const decodedToken: DecodedToken = jwtDecode(formattedToken)
 
+      const allowedDomain = this.options?.allowedDomain
+
       if (
-        decodedToken &&
-        decodedToken.accessible_domains &&
-        !decodedToken.accessible_domains.includes('the-atlas')
+        decodedToken && !decodedToken.accessible_domains?.includes(allowedDomain)
       ) {
         response.valid = false
         return response

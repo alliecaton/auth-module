@@ -39,7 +39,8 @@ export default <NuxtConfig>{
           property: 'token.refreshToken',
           data: 'refreshToken',
           maxAge: false
-        }
+        },
+        allowedDomain: 'the-atlas.com'
       },
       auth0: {
         domain: 'nuxt-auth.auth0.com',
