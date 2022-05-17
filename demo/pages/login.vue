@@ -31,6 +31,10 @@
               <b-btn variant="secondary" block @click="localRefresh">
                 Login with Refresh
               </b-btn>
+
+              <b-btn variant="secondary" block @click="atlasRefresh">
+                Login with Atlas Refresh
+              </b-btn>
             </div>
           </form>
         </b-card>
@@ -177,6 +181,23 @@ export default Vue.extend({
 
       return this.$auth
         .loginWith('localRefresh', {
+          data: {
+            username: this.username,
+            password: this.password
+          }
+        })
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.error(err)
+          this.error = err.response?.data
+        })
+    },
+
+    atlasRefresh() {
+      this.error = null
+
+      return this.$auth
+        .loginWith('atlasRefresh', {
           data: {
             username: this.username,
             password: this.password

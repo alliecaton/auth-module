@@ -14,7 +14,6 @@ import {
   ExpiredAuthSessionError
 } from '../inc'
 import { LocalScheme, LocalSchemeEndpoints, LocalSchemeOptions } from './local'
-import jwtDecode from 'jwt-decode'
 
 export interface RefreshSchemeEndpoints extends LocalSchemeEndpoints {
   refresh: HTTPRequest
@@ -47,10 +46,6 @@ const DEFAULTS: SchemePartialOptions<RefreshSchemeOptions> = {
   },
   allowedDomain: 'the-atlas.com',
   autoLogout: false
-}
-
-interface DecodedToken extends RefreshToken {
-  accessible_domains: string[]
 }
 
 export class RefreshScheme<
@@ -89,20 +84,6 @@ export class RefreshScheme<
     // Token and refresh token are required but not available
     if (!token || !refreshToken) {
       return response
-    }
-
-    if (token) {
-      const formattedToken = (token as string).replace('Bearer ', '')
-      const decodedToken: DecodedToken = jwtDecode(formattedToken)
-
-      const allowedDomain = this.options?.allowedDomain
-
-      if (
-        decodedToken && !decodedToken.accessible_domains?.includes(allowedDomain)
-      ) {
-        response.valid = false
-        return response
-      }
     }
 
     // Check status wasn't enabled, let it pass

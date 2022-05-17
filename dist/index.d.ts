@@ -357,6 +357,7 @@ export declare interface RefreshSchemeEndpoints extends LocalSchemeEndpoints {
 export declare interface RefreshSchemeOptions extends LocalSchemeOptions, RefreshableSchemeOptions {
     endpoints: RefreshSchemeEndpoints;
     autoLogout: boolean;
+    allowedDomain: string;
 }
 
 export declare class RefreshToken {

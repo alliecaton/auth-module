@@ -1,4 +1,5 @@
 import { NuxtConfig } from '@nuxt/types'
+import auth from './api/auth'
 
 export default <NuxtConfig>{
   build: {
@@ -40,7 +41,19 @@ export default <NuxtConfig>{
           data: 'refreshToken',
           maxAge: false
         },
-        allowedDomain: 'the-atlas.com'
+      },
+      atlasRefresh: {
+        scheme: '~/schemes/atlasRefresh',
+        allowedDomain: 'the-atlas.com', 
+        token: {
+          property: 'token.accessToken',
+          maxAge: 15
+        },
+        refreshToken: {
+          property: 'token.refreshToken',
+          data: 'refreshToken',
+          maxAge: false
+        },
       },
       auth0: {
         domain: 'nuxt-auth.auth0.com',

@@ -1408,6 +1408,7 @@ const DEFAULTS = {
     prefix: "_refresh_token.",
     expirationPrefix: "_refresh_token_expiration."
   },
+  allowedDomain: "the-atlas.com",
   autoLogout: false
 };
 class RefreshScheme extends LocalScheme {
@@ -1427,14 +1428,6 @@ class RefreshScheme extends LocalScheme {
     const refreshToken = this.refreshToken.sync();
     if (!token || !refreshToken) {
       return response;
-    }
-    if (token) {
-      const formattedToken = token.replace("Bearer ", "");
-      const decodedToken = jwtDecode__default["default"](formattedToken);
-      if (decodedToken && decodedToken.accessible_domains && !decodedToken.accessible_domains.includes("the-atlas")) {
-        response.valid = false;
-        return response;
-      }
     }
     if (!checkStatus) {
       response.valid = true;

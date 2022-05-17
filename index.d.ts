@@ -419,6 +419,7 @@ interface RefreshSchemeEndpoints extends LocalSchemeEndpoints {
 interface RefreshSchemeOptions extends LocalSchemeOptions, RefreshableSchemeOptions {
     endpoints: RefreshSchemeEndpoints;
     autoLogout: boolean;
+    allowedDomain: string;
 }
 declare class RefreshScheme<OptionsT extends RefreshSchemeOptions = RefreshSchemeOptions> extends LocalScheme<OptionsT> implements RefreshableScheme<OptionsT> {
     refreshToken: RefreshToken;
