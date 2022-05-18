@@ -135,7 +135,7 @@ describe('e2e', () => {
     await page.close()
   })
 
-  test('whenAllowedDomainIsSet', async () => {
+  test('whenAllowedDomainIsValid', async () => {
     const page = await createPage('/')
     await page.waitForFunction('!!window.$nuxt')
 
@@ -148,7 +148,57 @@ describe('e2e', () => {
       loginResponse,
       isValid,
     } = await page.evaluate(async () => {
-      const loginResponse = await window.$nuxt.$auth.loginWith('localRefresh', {
+      const loginResponse = await window.$nuxt.$auth.loginWith('atlasRefresh', {
+        data: {
+          username: 'test_username',
+          password: '123',
+          accessibleDomains: ['marketedge.the-atlas.com', 'the-atlas.com']
+        }
+      })
+      const strategy = (window.$nuxt.$auth
+        .strategy as unknown) as RefreshableScheme
+
+      const validate = await window.$nuxt.$auth.check().valid
+
+      return {
+        loginAxiosBearer:
+          window.$nuxt.$axios.defaults.headers.common.Authorization,
+        loginToken: strategy.token.get(),
+        loginRefreshToken: strategy.refreshToken.get(),
+        // @ts-ignore
+        loginExpiresAt: strategy.token._getExpiration(),
+        loginUser: window.$nuxt.$auth.user,
+        loginResponse,
+        isValid: validate
+      }
+    })
+
+    expect(isValid).toBeTruthy() // checks that login attempt is invalid
+    expect(loginAxiosBearer).toBeDefined()
+    expect(loginAxiosBearer.split(' ')).toHaveLength(2)
+    expect(loginAxiosBearer.split(' ')[0]).toMatch(/^Bearer$/i)
+    expect(loginToken).toBeDefined()
+    expect(loginRefreshToken).toBeDefined()
+    expect(loginExpiresAt).toBeDefined()
+    expect(loginUser).toBeTruthy() // checks that there is no current user logged in
+    expect(loginResponse).toBeDefined()
+  })
+
+
+  test('whenAllowedDomainIsInvalid', async () => {
+    const page = await createPage('/')
+    await page.waitForFunction('!!window.$nuxt')
+
+    const {
+      loginToken,
+      loginRefreshToken,
+      loginExpiresAt,
+      loginUser,
+      loginAxiosBearer,
+      loginResponse,
+      isValid,
+    } = await page.evaluate(async () => {
+      const loginResponse = await window.$nuxt.$auth.loginWith('atlasRefresh', {
         data: {
           username: 'test_username',
           password: '123',

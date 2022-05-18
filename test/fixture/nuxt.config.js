@@ -30,6 +30,19 @@ export default {
           maxAge: false
         }
       },
+      atlasRefresh: {
+        scheme: 'schemes/atlasRefresh',
+        allowedDomain: 'the-atlas.com', 
+        token: {
+          property: 'token.accessToken',
+          maxAge: 15
+        },
+        refreshToken: {
+          property: 'token.refreshToken',
+          data: 'refreshToken',
+          maxAge: false
+        },
+      },
       test: {
         provider: '~/auth/test-provider.js',
         scheme: '~/auth/test-scheme.js'
