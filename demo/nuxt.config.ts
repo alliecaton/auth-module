@@ -1,5 +1,4 @@
 import { NuxtConfig } from '@nuxt/types'
-import auth from './api/auth'
 
 export default <NuxtConfig>{
   build: {

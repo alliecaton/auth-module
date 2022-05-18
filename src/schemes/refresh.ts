@@ -24,7 +24,6 @@ export interface RefreshSchemeOptions
     RefreshableSchemeOptions {
   endpoints: RefreshSchemeEndpoints
   autoLogout: boolean
-  allowedDomain: string
 }
 
 const DEFAULTS: SchemePartialOptions<RefreshSchemeOptions> = {
@@ -44,7 +43,6 @@ const DEFAULTS: SchemePartialOptions<RefreshSchemeOptions> = {
     prefix: '_refresh_token.',
     expirationPrefix: '_refresh_token_expiration.'
   },
-  allowedDomain: 'the-atlas.com',
   autoLogout: false
 }
 

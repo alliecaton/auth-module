@@ -1396,7 +1396,6 @@ const DEFAULTS = {
     prefix: "_refresh_token.",
     expirationPrefix: "_refresh_token_expiration."
   },
-  allowedDomain: "the-atlas.com",
   autoLogout: false
 };
 class RefreshScheme extends LocalScheme {

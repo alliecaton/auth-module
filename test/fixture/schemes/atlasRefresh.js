@@ -21,7 +21,6 @@ export default class AtlasRefresh extends RefreshScheme {
 
         
         if (token) {
-          console.log('hit')
           const formattedToken = token.replace('Bearer ', '')
           const decodedToken = jwtDecode(formattedToken)
     

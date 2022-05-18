@@ -1,12 +1,17 @@
 import { RefreshScheme } from '../../dist/runtime'
 import { RefreshToken } from '../../dist/runtime'
 import { SchemeCheck } from '../../src/types'
+import {RefreshSchemeOptions} from '../../dist/runtime'
 
 import jwtDecode from 'jwt-decode'
 
-  interface DecodedToken extends RefreshToken {
-    accessible_domains: string[]
-  }
+interface AtlasRefreshSchemeOptions extends RefreshSchemeOptions {
+  allowedDomain: string
+}
+
+interface DecodedToken extends RefreshToken {
+  accessible_domains: string[]
+}
 
 export default class AtlasRefresh extends RefreshScheme {
     check(checkStatus = false): SchemeCheck {
@@ -27,11 +32,10 @@ export default class AtlasRefresh extends RefreshScheme {
 
         
         if (token) {
-          console.log('hit')
           const formattedToken = (token as string).replace('Bearer ', '')
           const decodedToken: DecodedToken = jwtDecode(formattedToken)
     
-          const allowedDomain = this.options?.allowedDomain
+          const allowedDomain = (this.options as AtlasRefreshSchemeOptions)?.allowedDomain
 
           if (
             decodedToken && !decodedToken.accessible_domains?.includes(allowedDomain)

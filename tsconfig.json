@@ -19,7 +19,5 @@
       "./src/shim"
     ]
   },
-  "include": [
-    "./src"
-, "demo/schemes/atlasRefresh.ts" ]
+  "include": [ "./src", "demo/schemes/atlasRefresh.ts" ]
 }

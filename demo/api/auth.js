@@ -31,7 +31,7 @@ app.post('/login', (req, res) => {
   const { username, password } = req.body
   const accessibleDomains = req.body.accessibleDomains || [
     'marketedge.the-atlas.com',
-    'the-atlas.com'
+    // 'the-atlas.com'
   ]
 
   const valid = username.length && password === '123'
