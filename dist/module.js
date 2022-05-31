@@ -48,7 +48,7 @@ const moduleDefaults = {
 };
 
 function assignDefaults(strategy, defaults) {
-  Object.assign(strategy, defu2__default["default"](strategy, defaults));
+  Object.assign(strategy, defu2__default['default'](strategy, defaults));
 }
 function addAuthorize(nuxt, strategy, useForms = false) {
   const clientSecret = strategy.clientSecret;
@@ -59,7 +59,7 @@ function addAuthorize(nuxt, strategy, useForms = false) {
   const endpoint = `/_auth/oauth/${strategy.name}/authorize`;
   strategy.endpoints.token = endpoint;
   strategy.responseType = "code";
-  const formMiddleware = bodyParser__default["default"].urlencoded({extended: true});
+  const formMiddleware = bodyParser__default['default'].urlencoded({extended: true});
   nuxt.options.serverMiddleware.unshift({
     path: endpoint,
     handler: (req, res, next) => {
@@ -97,10 +97,10 @@ function addAuthorize(nuxt, strategy, useForms = false) {
           "Content-Type": "application/json"
         };
         if (useForms) {
-          data = qs__default["default"].stringify(data);
+          data = qs__default['default'].stringify(data);
           headers["Content-Type"] = "application/x-www-form-urlencoded";
         }
-        axios2__default["default"].request({
+        axios2__default['default'].request({
           method: "post",
           url: tokenEndpoint,
           data,
@@ -123,7 +123,7 @@ function initializePasswordGrantFlow(nuxt, strategy) {
   const endpoint = `/_auth/${strategy.name}/token`;
   strategy.endpoints.login.url = endpoint;
   strategy.endpoints.refresh.url = endpoint;
-  const formMiddleware = bodyParser__default["default"].json();
+  const formMiddleware = bodyParser__default['default'].json();
   nuxt.options.serverMiddleware.unshift({
     path: endpoint,
     handler: (req, res, next) => {
@@ -144,10 +144,10 @@ function initializePasswordGrantFlow(nuxt, strategy) {
         if (data.grant_type === "refresh_token" && !data.refresh_token) {
           return next(new Error("Refresh token not provided"));
         }
-        axios2__default["default"].request({
+        axios2__default['default'].request({
           method: "post",
           url: tokenEndpoint,
-          baseURL: requrl2__default["default"](req),
+          baseURL: requrl2__default['default'](req),
           data: {
             client_id: clientId,
             client_secret: clientSecret,
@@ -484,7 +484,7 @@ function resolveScheme(nuxt, scheme) {
     const _path = path.replace(/\\/g, "/");
     return {
       name: "default",
-      as: "Scheme$" + hash__default["default"](_path).substr(0, 4),
+      as: "Scheme$" + hash__default['default'](_path).substr(0, 4),
       from: _path
     };
   }
@@ -508,7 +508,7 @@ function resolveProvider(nuxt, provider) {
 }
 
 const authModule = function(moduleOptions) {
-  const options2 = defu2__default["default"](moduleOptions, this.options.auth, moduleDefaults);
+  const options2 = defu2__default['default'](moduleOptions, this.options.auth, moduleDefaults);
   const {strategies, strategyScheme} = resolveStrategies(this.nuxt, options2);
   delete options2.strategies;
   const _uniqueImports = new Set();
